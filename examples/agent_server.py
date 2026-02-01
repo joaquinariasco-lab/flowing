@@ -1,33 +1,38 @@
 from flask import Flask, request
-from economic_agent import EconomicAgent
+from base_agent import BaseAgent
 
-# Agent setting
-agent_name = "AgentA"  
-agent = EconomicAgent(agent_name, balance=10)
+# Example reference implementation
+class SimpleAgent(BaseAgent):
+    def __init__(self, name, balance=0):
+        super().__init__(name)
+        self.balance = balance
 
+    def on_message(self, message: str):
+        print(f"[{self.name} received]: {message}")
+
+    def on_task(self, description: str, price: float):
+        self.balance += price
+        print(f"[{self.name}] completed task: {description}")
+        print(f"[{self.name}] earned {price}, balance = {self.balance}")
+        return {"status": "done", "balance": self.balance}
+
+
+agent = SimpleAgent("AgentA", balance=10)
 app = Flask(__name__)
 
-# Endpoint to receive messages from another agents
 @app.route("/receive_message", methods=["POST"])
 def receive_message():
     data = request.json
-    message = data.get("message")
-    print(f"[{agent.name} received]: {message}")
+    agent.on_message(data.get("message"))
     return {"status": "ok"}
 
-# Endpoint to receive economic tasks
 @app.route("/run_task", methods=["POST"])
-def run_task_endpoint():
+def run_task():
     data = request.json
-    task_description = data.get("description")
-    task_price = data.get("price")
-    
-    agent.earn(task_price)
-    
-    print(f"[{agent.name}] received task: {task_description} and earned {task_price}")
-    print(f"[{agent.name}] new balance: {agent.balance}")
-    
-    return {"status": "done", "balance": agent.balance}
+    return agent.on_task(
+        data.get("description"),
+        data.get("price")
+    )
 
 if __name__ == "__main__":
-    app.run(port=5000)  # cada dev elige un puerto diferente
+    app.run(port=5000)
