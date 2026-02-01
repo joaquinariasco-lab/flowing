@@ -1,0 +1,5 @@
+{
+    "AgentA": "http://localhost:5000",
+    "AgentB": "http://localhost:5001",
+    "AgentC": "http://localhost:5002"
+}
