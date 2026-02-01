@@ -1,4 +1,12 @@
+import requests
 from example_agent import ExampleAgent
+
+def send_message_http(self, target_url, message):
+    try:
+        requests.post(f"{target_url}/receive_message", json={"message": message})
+        print(f"[{self.name} sending to {target_url}]: {message}")
+    except Exception as e:
+        print(f"Error sending message: {e}")
 
 class EconomicAgent(ExampleAgent):
     def __init__(self, name, balance=10):
