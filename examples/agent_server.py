@@ -36,3 +36,14 @@ def run_task():
 
 if __name__ == "__main__":
     app.run(port=5000)
+
+@app.route("/identity", methods=["GET"])
+def identity():
+    return {
+        "name": agent.name,
+        "framework": "custom",
+        "capabilities": ["example-task"],
+        "accepts_tasks": True,
+        "pricing_model": "fixed",
+        "version": "0.1"
+    }
