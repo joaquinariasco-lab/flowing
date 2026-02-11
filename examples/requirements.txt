@@ -1,2 +1,14 @@
-Flask>=2.0.0
-requests>=2.0.0
+# Core dependencies
+Flask>=2.3.0
+requests>=2.31.0
+
+# Optional: WebSocket support
+flask-socketio>=5.3.0
+python-socketio>=5.9.0
+python-engineio>=4.7.0
+
+# Optional: Async messaging with Redis
+redis>=5.0.0
+
+# Development dependencies (optional)
+python-dotenv>=1.0.0
