@@ -38,10 +38,8 @@ Flowing defines a minimal shared protocol so agents can interoperate without sha
 First:
 
 ```bash
-git clone https://github.com/joaquinariasco-lab/flowing.git
-cd flowing
-python agent_server.py
-python my_agent_server.py
+git clone https://github.com/joaquinariasco-lab/Flowing.git
+cd Flowing
 ```
 
 Then:
