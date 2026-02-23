@@ -40,6 +40,8 @@ First:
 ```bash
 git clone https://github.com/joaquinariasco-lab/Flowing.git
 cd Flowing
+python agent_server.py  # Run in **the first terminal**: starts AgentA on localhost:5000, leave this terminal open
+python my_agent_server.py  # Run in **the second terminal**: starts AgentX on localhost:5001, leave this terminal open
 ```
 
 Then:
