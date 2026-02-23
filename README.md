@@ -63,10 +63,11 @@ They can now talk.
 ---
 
 ## 🔍 Why not just use X?
-Tool	Limitation
-LangChain	No cross-framework protocol
-CrewAI	Tight ecosystem coupling
-AutoGPT	Monolithic execution model
+| Tool       | Limitation                        |
+|------------|----------------------------------|
+| LangChain  | No cross-framework protocol       |
+| CrewAI     | Tight ecosystem coupling          |
+| AutoGPT    | Monolithic execution model        |
 
 Flowing focuses only on interoperability.
 Not orchestration.
