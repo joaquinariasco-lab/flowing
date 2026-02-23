@@ -1,169 +1,100 @@
-# flowing
-# Agent Interop Layer
+# Flowing
+### A minimal layer letting AI agents from different frameworks communicate and delegate tasks.
 
-An open interoperability layer for autonomous AI agents.
+Make a LangChain agent talk to a CrewAI agent in minutes.
 
 ---
 
-## The Problem
+## Why this exists
 
-AI agents are exploding in number.
-
-Every week, new agents are built using:
-
+Today, AI agents built with:
 - LangChain
 - CrewAI
 - AutoGPT-style systems
-- Custom in-house stacks
 
-But all of them run in isolation.
+And cannot communicate natively.
 
-There is no common way for agents to:
+Each team rebuilds:
+- Message passing
+- Task delegation
+- Context exchange
+- Execution boundaries
 
-- Discover each other
-- Communicate
-- Delegate tasks
-- Share execution context
-- Coordinate safely across frameworks
-
-We are rebuilding the same glue logic over and over.
+Flowing defines a minimal shared protocol so agents can interoperate without sharing a framework.
 
 ---
 
-## What This Project Is
-
-This repository defines a **minimal, framework-agnostic interoperability layer for AI agents**.
-
-It focuses on:
-
-- A shared agent interface
-- A neutral message & task exchange format
-- Execution boundaries and permissions
-- Simple coordination primitives (request, delegate, respond)
-
-> The goal is **not to replace existing agent frameworks**.  
-> The goal is to **let them talk to each other**.
+## ⚡What you can do with it
+- Run two independent agents on different ports
+- Send structured tasks between them
+- Delegate execution safely
+- Maintain execution boundaries
+- Build framework adapters
 
 ---
 
-## What This Project Is NOT
+## 🚀 5-Minute Demo
 
-This is **NOT**:
+First:
 
-- Another agent framework
-- A model provider
-- A hosted SaaS
-- A closed ecosystem
-
-This project is intentionally:
-
-- Open
-- Minimal
-- Composable
-- Model-agnostic
-
----
-
-## Why Now
-
-- Models are becoming commodities.
-- Agents are no longer demos — they are being deployed in real workflows.
-- The bottleneck is no longer intelligence.  
-  The bottleneck is **coordination**.
-- The missing piece is an **execution and communication standard**.
-
----
-
-## Core Ideas (Early Draft)
-
-- Agents should be treated as networked actors
-- Interoperability should not depend on a single vendor
-- Control planes should be separate from models
-- Coordination > raw intelligence
-
-> This repo is the place to experiment with those ideas.
-
----
-
-## Current State
-
-**Early stage / experimental**
-
-Right now, this repo contains:
-
-- Initial interface definitions (`BaseAgent`)
-- Draft protocol concepts
-- Reference implementations (`agent_server.py`, `my_agent_server.py`)
-- Examples of agents interacting
-
-> Everything is intentionally lightweight.
-
----
-
-## Quickstart (Run Your First Agent in 5 Minutes)
-
-### 1. Clone the repository
-
-git clone <repo-url>
-cd <repo-folder>
-
-
-### 2. Run the Reference Agent
-
+git clone ...
+cd flowing
 python agent_server.py
-This starts AgentA on http://localhost:5000
-
-### 3. Run the Reference Agent
 python my_agent_server.py
-This starts AgentX on http://localhost:5001.
-Each dev can change the agent name and port.
 
-## 4. Send Messages or Tasks Between Agents
+Then:
+curl -X POST http://localhost:5001/run_task ...
 
-From another terminal:
-curl -X POST http://localhost:5001/receive_message \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello from AgentA"}'
-
-curl -X POST http://localhost:5001/run_task \
-  -H "Content-Type: application/json" \
-  -d '{"description": "Test task", "price": 10}
-
-### Expected Output
-
-- **AgentX** prints received messages  
-- **AgentX** executes tasks and prints balance updates  
-- Everything works without any private repo dependencies
+Now modify one server to wrap a LangChain agent.
+They can now talk.
 
 ---
 
-## Who This Is For
+## 🔍 Why not just use X?
+Tool	Limitation
+LangChain	No cross-framework protocol
+CrewAI	Tight ecosystem coupling
+AutoGPT	Monolithic execution model
 
-This project is for:
-
-- Developers building autonomous agents
-- Researchers exploring multi-agent systems
-- Engineers tired of re-implementing glue code
-- Anyone interested in agent coordination & orchestration
-
----
-
-## How to Get Involved
-
-You can contribute by:
-
-- Opening issues with real-world agent problems
-- Proposing interface changes
-- Implementing adapters for existing frameworks
-- Stress-testing coordination patterns
-
-> If you're building agents today, your input matters.
+Flowing focuses only on interoperability.
+Not orchestration.
+Not LLMs.
+Not SaaS.
+Just the protocol.
 
 ---
 
-## Long-Term Vision
+## 🧠 Core Design Principles
 
-Become the **interoperability layer that autonomous agents rely on** — the infrastructure others build on top of.
+- Agents are networked actors
+- Execution is isolated
+- Coordination primitives are minimal
+- No vendor lock-in
 
-- Not a product  
-- A standard
+---
+
+## 📦 Current State
+
+Experimental.
+Interface definitions evolving.
+
+Includes:
+- BaseAgent interface
+- Draft protocol
+- Two reference agent servers
+- Message + task examples
+
+---
+
+## 🛣 Roadmap
+- Adapter for LangChain
+- Adapter for CrewAI
+- Standardized task schema
+- Permission system
+- Discovery mechanism
+
+--- 
+## 🤝 Contributing
+
+If you're building agents and re-implementing glue code,
+this repo is for you.
