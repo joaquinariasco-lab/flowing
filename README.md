@@ -33,6 +33,22 @@ Flowing defines a minimal shared protocol so agents can interoperate without sha
 
 ---
 
+## Architecture
+
+This diagram shows how AgentA and AgentX communicate using the Flowing interoperability layer:
+
+```mermaid
+flowchart TD
+    Repo[Flowing Repo] --> AgentA
+    Repo --> AgentX
+    AgentA -->|send message| AgentX
+    AgentX -->|respond| AgentA
+    AgentA -->|run task| AgentX
+    AgentX -->|update balance| AgentA
+```
+
+---
+
 ## 🚀 30-Second Quick Start
 
 ### Mac / Linux:
@@ -66,6 +82,36 @@ Unblock-File .\run.ps1
 ```bash
 ./install.ps1
 ```
+
+---
+
+## Demo Steps
+
+This flowchart shows the steps when running the demo:
+
+```mermaid
+flowchart LR
+    User -->|Open Terminal| Terminal
+    Terminal -->|Run install.ps1 / run.sh| VirtualEnv
+    VirtualEnv --> AgentA
+    VirtualEnv --> AgentX
+    AgentA -->|Send Test Message| AgentX
+    AgentX -->|Print Message & Execute Task| Terminal
+```
+
+## Agent Interaction Example
+
+```mermaid
+sequenceDiagram
+    participant A as AgentA
+    participant X as AgentX
+
+    A->>X: {"message": "Hello from AgentA"}
+    X-->>A: {"status": "ok"}
+    A->>X: {"description": "Test task", "price": 10}
+    X-->>A: {"balance": 10}
+```
+
 ---
 
 ## 🔍 Why not just use X?
