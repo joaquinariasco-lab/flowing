@@ -50,10 +50,21 @@ git clone https://github.com/joaquinariasco-lab/Flowing.git; cd Flowing; ./insta
 #### Without git already installed:
 ##### 1- Download the repository ZIP: "https://github.com/joaquinariasco-lab/Flowing/archive/refs/heads/main.zip"
 ##### 2- Extract it to a folder, e.g., C:\Users\YourName\Flowing
-##### 3- Open PowerShell in that folder (Shift + Right Click → “Open PowerShell window here”)
+##### 3- Open PowerShell in the main folder (Shift + Right Click → “Open PowerShell window here”)
 ##### 4- Allow running scripts (only needed the first time):
 ```bash
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+##### 5- Unblock the files:
+```bash
+Unblock-File .\install.ps1
+```
+```bash
+Unblock-File .\run.ps1
+```
+##### 6- Execute the demo:
+```bash
+./install.ps1
 ```
 ---
 
