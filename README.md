@@ -36,11 +36,13 @@ Flowing defines a minimal shared protocol so agents can interoperate without sha
 ## 🚀 30-Second Quick Start
 
 ### Mac / Linux:
+Open the terminal and paste:
 ```bash
 git clone https://github.com/joaquinariasco-lab/Flowing.git && cd Flowing && chmod +x install.sh run.sh && ./install.sh
 ```
 
 ### Window:
+Open PowerShell and paste:
 ```bash
 git clone https://github.com/joaquinariasco-lab/Flowing.git; cd Flowing; ./install.ps1
 ```
