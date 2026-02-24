@@ -33,47 +33,17 @@ Flowing defines a minimal shared protocol so agents can interoperate without sha
 
 ---
 
-## 🚀 Demo
+## 🚀 30-Second Quick Start
 
-### 1️⃣ Clone the repository:
+### Mac / Linux:
 ```bash
-git clone https://github.com/joaquinariasco-lab/Flowing.git
-cd Flowing
+git clone https://github.com/joaquinariasco-lab/Flowing.git && cd Flowing && chmod +x install.sh && ./install.sh
 ```
 
-Install Python packages:
-
+### Window:
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/joaquinariasco-lab/Flowing.git; cd Flowing; ./install.ps1
 ```
-
-First:
-
-```bash
-git clone https://github.com/joaquinariasco-lab/Flowing.git
-cd Flowing
-cd examples
-python3 agent_server.py  # Run in **the first terminal**: starts AgentA on localhost:5000, leave this terminal open
-python3 my_agent_server.py  # Run in **the second terminal**: starts AgentX on localhost:5001, leave this terminal open
-
-# Windows (if python3 not recognized), python agent_server.py
-```
-
-Then:
-```bash
-# Sending a message to AgentX
-curl -X POST http://localhost:5001/receive_message \
--H "Content-Type: application/json" \
--d '{"message": "Hello from AgentA"}'
-
-# Do a task
-curl -X POST http://localhost:5001/run_task \
--H "Content-Type: application/json" \
--d '{"description": "Test task", "price": 10}'
-```
-
-Now modify one server to wrap a LangChain agent.
-They can now talk.
 
 ---
 
