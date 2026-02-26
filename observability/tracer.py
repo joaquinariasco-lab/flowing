@@ -24,6 +24,15 @@ class Tracer:
         }
         self.events.append(event)
 
-    def flush(self):
-        with open(self.file_path, "w") as f:
-            json.dump(self.events, f, indent=2)
+ def flush(self):
+    existing_events = []
+    if self.file_path.exists():
+        try:
+            with open(self.file_path, "r") as f:
+                existing_events = json.load(f)
+        except Exception:
+            existing_events = []
+    combined_events = existing_events + self.events
+    with open(self.file_path, "w") as f:
+        json.dump(combined_events, f, indent=2)
+    self.events = []  # clean the buffer before write
