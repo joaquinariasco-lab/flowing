@@ -3,6 +3,7 @@ import requests
 import time
 from typing import Dict, Any, List
 from datetime import datetime
+from flowing.observability.tracer import Tracer
 
 
 class BaseAgent(ABC):
@@ -25,7 +26,13 @@ class BaseAgent(ABC):
         self.task_history = []
         self.outgoing_messages = []
         self.creation_time = datetime.now().isoformat()
-    
+
+          # 🔍 Observability
+        self.tracer = Tracer()
+        self.tracer.log(self.name, "agent_initialized", {
+        "retry_policy": self.retry_policy
+        })
+        
     @abstractmethod
     def on_message(self, message: str):
         """
@@ -62,6 +69,10 @@ class BaseAgent(ABC):
         Returns:
             Response dictionary with status
         """
+        self.tracer.log(self.name, "send_message_attempt", {
+        "target": agent_url,
+        "message": message
+        })
         
         for attempt in range(self.retry_policy["max_retries"]):
             try:
@@ -81,6 +92,10 @@ class BaseAgent(ABC):
                 
                 print(f"✅ [{self.name}] Message sent to {agent_url}")
                 return {"status": "ok", "response": response.json()}
+                self.tracer.log(self.name, "message_sent_success", {
+                "target": agent_url,
+                "response_status": "ok"
+                })
             
             except requests.exceptions.Timeout:
                 print(f"⏱️ Timeout on attempt {attempt + 1}")
@@ -88,6 +103,10 @@ class BaseAgent(ABC):
                 print(f"🔌 Connection error on attempt {attempt + 1}")
             except Exception as e:
                 print(f"❌ Error: {e}")
+                self.tracer.log(self.name, "message_failed", {
+                "target": agent_url,
+                "reason": "max_retries_exceeded"
+                })
             
             # Exponential backoff
             if attempt < self.retry_policy["max_retries"] - 1:
@@ -120,6 +139,11 @@ class BaseAgent(ABC):
         Returns:
             Response dictionary with task result
         """
+        self.tracer.log(self.name, "task_delegation_attempt", {
+        "target": agent_url,
+        "description": description,
+        "price": price
+        })
         
         for attempt in range(self.retry_policy["max_retries"]):
             try:
@@ -145,9 +169,17 @@ class BaseAgent(ABC):
                 
                 print(f"✅ [{self.name}] Task delegated to {agent_url}")
                 return response.json()
+
+                self.tracer.log(self.name, "task_delegation_success", {
+               "target": agent_url,
+               "result": response.json()
+               })
             
             except Exception as e:
                 print(f"❌ Error on attempt {attempt + 1}: {e}")
+                self.tracer.log(self.name, "task_delegation_failed", {
+                "target": agent_url
+                })
             
             if attempt < self.retry_policy["max_retries"] - 1:
                 wait_time = 2 ** attempt
