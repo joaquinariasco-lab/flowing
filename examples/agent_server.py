@@ -1,5 +1,7 @@
 from flask import Flask, request
 from base_agent import BaseAgent
+from flowing.observability.tracer import Tracer
+import time
 
 # Example reference implementation
 class SimpleAgent(BaseAgent):
@@ -23,16 +25,43 @@ app = Flask(__name__)
 @app.route("/receive_message", methods=["POST"])
 def receive_message():
     data = request.json
+    trace_id = data.get("trace_id")
+    tracer = Tracer(trace_id=trace_id)
+    start_time = time.time()
+    tracer.log(agent.name, "message_received", {
+        "from": data.get("sender"),
+        "message": data.get("message")
+    })
     agent.on_message(data.get("message"))
+    duration = time.time() - start_time
+    tracer.log(agent.name, "message_processed", {
+        "duration_seconds": duration
+    })
+    tracer.flush()
     return {"status": "ok"}
 
 @app.route("/run_task", methods=["POST"])
 def run_task():
     data = request.json
-    return agent.on_task(
+    trace_id = data.get("trace_id")
+    tracer = Tracer(trace_id=trace_id)
+    start_time = time.time()
+    tracer.log(agent.name, "task_received", {
+        "from": data.get("sender"),
+        "description": data.get("description"),
+        "price": data.get("price")
+    })
+    result = agent.on_task(
         data.get("description"),
         data.get("price")
     )
+    duration = time.time() - start_time
+    tracer.log(agent.name, "task_completed", {
+        "result": result,
+        "duration_seconds": duration
+    })
+    tracer.flush()
+    return result
 
 if __name__ == "__main__":
     app.run(port=5000)
