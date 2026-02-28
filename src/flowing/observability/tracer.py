@@ -15,3 +15,8 @@ class Tracer:
 
     def export(self):
         return [event.__dict__ for event in self.events]
+
+    def export_json(self, path="trace.json"):
+        import json
+        with open(path, "w") as f:
+            json.dump(self.export(), f, indent=2)
