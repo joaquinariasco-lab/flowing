@@ -1,0 +1,24 @@
+[
+  {
+    "agent_id": "planner",
+    "prompt": "Decide what to research",
+    "model": "gpt-4",
+    "temperature": 0.2,
+    "output": "Research quantum networking",
+    "tool_calls": [],
+    "parent_id": null,
+    "decision_id": "bb02258d-2402-4df6-9b9b-ddcabd23b37a",
+    "timestamp": 1772296472.7167425
+  },
+  {
+    "agent_id": "executor",
+    "prompt": "Search for quantum networking papers",
+    "model": "gpt-4",
+    "temperature": 0.2,
+    "output": "Found 3 relevant papers",
+    "tool_calls": [],
+    "parent_id": "bb02258d-2402-4df6-9b9b-ddcabd23b37a",
+    "decision_id": "ad60927f-e9f9-4c6f-b5d9-ab40e448520c",
+    "timestamp": 1772296472.7168157
+  }
+]
