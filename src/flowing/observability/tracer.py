@@ -1,4 +1,7 @@
 from typing import List
+from dataclasses import asdict
+import json
+
 from flowing.decision.event import DecisionEvent
 from flowing.decision.span import DecisionSpan
 
@@ -14,9 +17,9 @@ class Tracer:
         self.events.append(event)
 
     def export(self):
-        return [event.__dict__ for event in self.events]
+        # Convierte cada DecisionEvent en dict
+        return [asdict(event) for event in self.events]
 
     def export_json(self, path="trace.json"):
-        import json
         with open(path, "w") as f:
             json.dump(self.export(), f, indent=2)
