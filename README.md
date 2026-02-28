@@ -1,13 +1,17 @@
 # Flowing
-### Observability & Tracing for Multi-Agent AI Workflows
-Flowing provides tools to trace, log, and visualize how multiple AI agents interact and execute workflows, helping developers debug, understand, and improve agent coordination.
+### Reproducibility and traceability of LLM decisions in multi-agent workflows in Python
 
-Rather than focusing on orchestration or being a universal interoperability layer, Flowing focuses on structured execution visibility so you can answer questions like:
-- What steps did each agent take?
-- When did tool calls happen and why?
-- Where did context pass between agents?
-- What caused a workflow to succeed or fail?
-This visibility is essential for troubleshooting, performance optimization, cost control, and trust in multi-agent systems.
+Flowing is designed for developers building multi-agent LLM systems who need to **understand, reproduce, and debug exactly why the system made each decision**.  
+
+This is not generic observability, monitoring, or general-purpose AI tooling.  
+Flowing focuses solely on **capturing every agent decision, its inputs, outputs, and parent-child relationships**, enabling full step-by-step reconstruction of any workflow execution.
+
+If you work with multiple LLM agents and **cannot reproduce or explain why a certain outcome was reached**, Flowing provides the tools to:
+
+- Record every decision from each agent
+- Connect parent and child decisions
+- Store prompts, outputs, context, and relevant metadata
+- Export reproducible traces for analysis and debugging
 
 ---
 
