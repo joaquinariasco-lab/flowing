@@ -15,7 +15,7 @@ def call_llm(runtime, decision_id, agent_id, prompt, real_llm_call):
         "parent_id": None,
     }
 
-    # TODO: enviar a tu tracer real
-    print("TRACE EVENT:", event)
+    from flowing.observability.tracer import tracer
+    tracer.record(event)
 
     return output
