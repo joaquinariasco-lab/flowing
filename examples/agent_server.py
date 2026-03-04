@@ -63,6 +63,28 @@ def run_task():
     tracer.flush()
     return result
 
+@app.route("/message", methods=["POST"])
+def message():
+    data = request.json
+    prompt = data.get("prompt")
+
+    # Call your agent logic (replace with actual handling if you have it)
+    response = agent.on_task(prompt, price=None) if hasattr(agent, "on_task") else f"Received: {prompt}"
+
+    # Log the decision in the tracer
+    if 'tracer' in globals() and hasattr(tracer, "record"):
+        from flowing.decision.event import DecisionEvent
+        event = DecisionEvent(
+            agent_id=agent.name,
+            prompt=prompt,
+            model="demo-model",
+            temperature=0.0,
+            output=response
+        )
+        tracer.record(event)
+
+    return {"response": response}
+
 if __name__ == "__main__":
     app.run(port=5000)
 

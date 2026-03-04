@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from dataclasses import asdict
 import json
 
@@ -8,6 +8,7 @@ from flowing.decision.span import DecisionSpan
 
 class Tracer:
     def __init__(self):
+        # Initialize the events list
         self.events: List[DecisionEvent] = []
 
     def decision_span(self, agent_id: str, parent_id=None):
@@ -16,8 +17,24 @@ class Tracer:
     def record(self, event: DecisionEvent):
         self.events.append(event)
 
+    # Convenience wrapper for demo compatibility
+    def log(self, agent_id: str, event_type: str, metadata: Optional[dict] = None):
+        event = DecisionEvent(
+            agent_id=agent_id,
+            prompt=event_type,
+            model="none",
+            temperature=0.0,
+            output=str(metadata or {}),
+            tool_calls=[],
+            parent_id=None
+        )
+        self.record(event)
+
+    def flush(self):
+        # No-op for demo compatibility
+        pass
+
     def export(self):
-        # Convierte cada DecisionEvent en dict
         return [asdict(event) for event in self.events]
 
     def export_json(self, path="trace.json"):

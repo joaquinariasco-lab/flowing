@@ -1,8 +1,46 @@
 from flask import Flask, request
 from my_agent import MyAgent
+from flowing.observability.tracer import Tracer
+from flowing.decision.event import DecisionEvent
+import time
 
-agent = MyAgent("AgentX")  # Cambiar nombre si otro dev clona
+# Initialize agent and tracer
+agent = MyAgent("AgentX")  # Change name if another dev clones
+tracer = Tracer()
 app = Flask(__name__)
+
+@app.route("/identity", methods=["GET"])
+def identity():
+    return {
+        "name": agent.name,
+        "framework": "custom",
+        "capabilities": ["example-task"],
+        "accepts_tasks": True,
+        "pricing_model": "fixed",
+        "version": "0.1"
+    }
+
+@app.route("/message", methods=["POST"])
+def message():
+    data = request.json
+    prompt = data.get("prompt")
+
+    # Run agent logic
+    start_time = time.time()
+    response = agent.on_task(prompt, price=None) if hasattr(agent, "on_task") else f"Received: {prompt}"
+    duration = time.time() - start_time
+
+    # Log decision
+    event = DecisionEvent(
+        agent_id=agent.name,
+        prompt=prompt,
+        model="demo-model",
+        temperature=0.0,
+        output=response
+    )
+    tracer.record(event)
+
+    return {"response": response, "duration_seconds": duration}
 
 @app.route("/receive_message", methods=["POST"])
 def receive_message():
