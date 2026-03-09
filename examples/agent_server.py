@@ -1,3 +1,4 @@
+from tracer import trace_event
 from flask import Flask, request
 from base_agent import BaseAgent
 from flowing.observability.tracer import Tracer
@@ -39,6 +40,8 @@ def receive_message():
     })
     tracer.flush()
     return {"status": "ok"}
+
+trace_event("AgentA", "received_message", {"info": "message received"})
 
 @app.route("/run_task", methods=["POST"])
 def run_task():

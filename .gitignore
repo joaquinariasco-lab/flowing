@@ -1,4 +1,5 @@
 venv/
+trace_log.json
 __pycache__/
 *.egg-info/
 *.pyc

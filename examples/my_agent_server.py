@@ -1,3 +1,4 @@
+from tracer import trace_event
 from flask import Flask, request
 from my_agent import MyAgent
 from flowing.observability.tracer import Tracer
@@ -47,6 +48,8 @@ def receive_message():
     data = request.json
     agent.on_message(data.get("message"))
     return {"status": "ok"}
+
+trace_event("AgentX", "received_message", {"info": "message received"})
 
 @app.route("/run_task", methods=["POST"])
 def run_task():
