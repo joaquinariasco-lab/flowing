@@ -34,3 +34,7 @@ else
 fi
 
 echo "✅ Flowing started! Agents running and dashboard should be open."
+
+# Start Streamlit dashboard
+venv/bin/streamlit run dashboard.py &
+echo "⚡ Dashboard should now be running at http://localhost:8502"
