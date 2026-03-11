@@ -9,7 +9,8 @@ python3 -m venv venv
 source venv/bin/activate
 
 # Install dependencies
-pip install -r requirements.txt
+venv/bin/pip install --upgrade pip
+venv/bin/pip install -r requirements.txt
 
 echo "✅ Installation complete."
 echo "Starting demo..."
