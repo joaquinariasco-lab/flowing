@@ -1,29 +1,34 @@
 #!/bin/bash
 
+echo "Starting Flowing MVP..."
+
 # Activate virtual environment
 source venv/bin/activate
 
-# Kill old agents if they exist
-kill -9 $(lsof -ti:5000) 2>/dev/null
-kill -9 $(lsof -ti:5001) 2>/dev/null
+# Start AgentA in background
+echo "Starting AgentA on port 5000..."
+PYTHONPATH=src venv/bin/python3 examples/agent_server.py &
 
-# Clean trace log
-rm -f trace_log.json
+# Start AgentX in background
+echo "Starting AgentX on port 5001..."
+PYTHONPATH=src venv/bin/python3 examples/my_agent_server.py &
 
-# Start agents in background
-python3 langchain/my_agent_server.py &   # adjust filename if different
-python3 langchain/agent_server.py &      # adjust filename if different
-
-# Wait a few seconds for agents to start
-sleep 3
+# Wait a moment for servers to be ready
+sleep 2
 
 # Start Streamlit dashboard in background
-streamlit run dashboard.py &
+echo "Starting Streamlit dashboard..."
+venv/bin/streamlit run dashboard.py &
 
-# Wait a few seconds for Streamlit server to start
-sleep 3
+# Try to automatically open the browser (Linux/Mac/Windows)
+if command -v xdg-open >/dev/null; then
+    xdg-open http://localhost:8502
+elif command -v open >/dev/null; then
+    open http://localhost:8502
+elif command -v start >/dev/null; then
+    start http://localhost:8502
+else
+    echo "⚠️ Could not auto-open browser. Open manually: http://localhost:8502"
+fi
 
-# Automatically open default browser to the dashboard
-python3 -m webbrowser http://localhost:8501
-
-echo "Flowing started! Agents running and dashboard opened in browser."
+echo "Flowing started! Agents running and dashboard should be open."
