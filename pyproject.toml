@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "flowing"
-version = "0.1.0"
+name = "flowing-os"  # <--- CHANGE THIS: 'flowing' is taken on PyPI
+version = "0.1.1"    # <--- RECOMMENDATION: Use 0.1.1 for your first clean upload
 description = "Interoperability and observability layer for multi-agent AI systems"
 readme = "README.md"
 authors = [
@@ -15,6 +15,7 @@ requires-python = ">=3.9"
 dependencies = []
 
 [tool.setuptools]
+# This tells Python to look in the 'src' folder for your code
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
