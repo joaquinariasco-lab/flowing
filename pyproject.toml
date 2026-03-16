@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flowing-os"
-version = "0.1.2"   
+version = "0.1.2"
 description = "Interoperability and observability layer for multi-agent AI systems"
 readme = "README.md"
 authors = [
@@ -12,11 +12,25 @@ authors = [
 ]
 license = { text = "MIT" }
 requires-python = ">=3.9"
-dependencies = []
+
+dependencies = [
+    "flask",
+    "streamlit",
+    "requests",
+    "networkx",
+    "plotly"
+]
+
+# THIS CREATES THE CLI COMMAND
+[project.scripts]
+flowing = "flowing.cli:main"
 
 [tool.setuptools]
-
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# include non-python files if needed
+[tool.setuptools.package-data]
+flowing = ["*.json"]
