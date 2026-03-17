@@ -2,7 +2,7 @@
 
 ---
 
-# Flowing
+# Flowin
 ### Reproducibility and traceability of LLM decisions in multi-agent workflows in Python
 
 Flowing is designed for developers building multi-agent LLM systems who need to **understand, reproduce, and debug exactly why the system made each decision**.  
