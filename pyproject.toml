@@ -1,42 +1,33 @@
-[project]
-name = "flowing-os"
-version = "0.1.0"
-dependencies = [
-    "click",
-    "streamlit",
-    "requests",
-    "flask",
-    "flask-socketio"
-]
-
-[project.scripts]
-flowing = "flowing.cli:main"
-[project.scripts]
-flowing = "flowing.cli:main"
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "flowing-os"
-version = "0.1.2"
+version = "0.1.3"
 description = "Interoperability and observability layer for multi-agent AI systems"
 readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
 authors = [
     { name = "Joaquín Gabriel Arias" }
 ]
-license = { text = "MIT" }
-requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
 
 dependencies = [
     "flask",
+    "flask-socketio",
     "streamlit",
     "requests",
     "networkx",
-    "plotly"
+    "plotly",
+    "click"
 ]
 
-# THIS CREATES THE CLI COMMAND
 [project.scripts]
 flowing = "flowing.cli:main"
 
@@ -46,6 +37,5 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# include non-python files if needed
 [tool.setuptools.package-data]
 flowing = ["*.json"]
