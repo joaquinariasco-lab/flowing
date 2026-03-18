@@ -1,3 +1,16 @@
+[project]
+name = "flowing-os"
+version = "0.1.0"
+dependencies = [
+    "click",
+    "streamlit",
+    "requests",
+    "flask",
+    "flask-socketio"
+]
+
+[project.scripts]
+flowing = "flowing.cli:main"
 [project.scripts]
 flowing = "flowing.cli:main"
 [build-system]
