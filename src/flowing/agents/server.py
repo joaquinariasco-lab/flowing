@@ -1,7 +1,7 @@
 from flowing import trace_agent
 from tracer import trace_event
 from flask import Flask, request
-from my_agent import MyAgent
+from flowing.agents.base import BaseAgent
 from flowing.observability.tracer import Tracer
 from flowing.decision.event import DecisionEvent
 import time
