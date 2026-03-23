@@ -1,57 +1,175 @@
 import click
 import subprocess
 import time
-import os
 import sys
 import webbrowser
+import signal
+import socket
+from importlib.resources import files
+
+# Global process registry
+processes = []
+
+
+# ----------------------------
+# Utils
+# ----------------------------
+
+def start_process(cmd, silent=False):
+    """Start a subprocess and track it."""
+    if silent:
+        p = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    else:
+        p = subprocess.Popen(cmd)
+    processes.append(p)
+    return p
+
+
+def shutdown(signum=None, frame=None):
+    """Terminate all subprocesses cleanly."""
+    click.echo("\n🛑 Shutting down Flowing...")
+    for p in processes:
+        try:
+            p.terminate()
+        except Exception:
+            pass
+    for p in processes:
+        try:
+            p.wait(timeout=5)
+        except Exception:
+            pass
+    sys.exit(0)
+
+
+def get_free_port():
+    """Get an available port."""
+    s = socket.socket()
+    s.bind(('', 0))
+    port = s.getsockname()[1]
+    s.close()
+    return port
+
+
+def wait_for_port(port, timeout=10):
+    """Wait until a port is open."""
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            with socket.create_connection(("localhost", port), timeout=1):
+                return True
+        except OSError:
+            time.sleep(0.2)
+    return False
+
+
+def get_dashboard_path():
+    """Resolve dashboard.py path inside installed package."""
+    return files("flowing.observability").joinpath("dashboard.py")
+
+
+# ----------------------------
+# CLI
+# ----------------------------
 
 @click.group()
 def main():
-    """Flowing: The Zero-Friction Debugger for AI Agents."""
+    """Flowing: The Control Plane for AI Agents."""
     pass
+
 
 @main.command()
 def dashboard():
-    """Launch the Real-Time Observability Dashboard."""
+    """Launch only the dashboard."""
     click.echo("🚀 Launching Flowing Dashboard...")
-    # Adjust path to where your streamlit app lives
-    subprocess.Popen(["streamlit", "run", "src/flowing/observability/dashboard.py"])
+
+    dashboard_path = str(get_dashboard_path())
+    port = get_free_port()
+
+    start_process([
+        sys.executable, "-m", "streamlit", "run",
+        dashboard_path,
+        "--server.port", str(port)
+    ])
+
+    if wait_for_port(port):
+        webbrowser.open(f"http://localhost:{port}")
+        click.echo(f"Dashboard running at http://localhost:{port}")
+    else:
+        click.echo("❌ Failed to start dashboard.")
+
 
 @main.command()
 def demo():
-    """WOW EFFECT: Start a full debugging ecosystem instantly."""
-    click.secho("🌊 Initializing Flowing Debugger Ecosystem...", fg='cyan', bold=True)
+    """WOW EFFECT: Start a full AI system with observability."""
     
-    # 1. Start the Dashboard (The Niche)
+    # Register shutdown handlers
+    signal.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGTERM, shutdown)
+
+    click.secho("🌊 Booting Flowing-OS...", fg='cyan', bold=True)
+
+    # ----------------------------
+    # 1. Start Dashboard
+    # ----------------------------
+    dashboard_path = str(get_dashboard_path())
+    dashboard_port = get_free_port()
+
     click.echo("📊 Starting Observability UI...")
-    subprocess.Popen(["streamlit", "run", "src/flowing/observability/dashboard.py"], 
-                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    
-    # Give Streamlit a moment to start
-    time.sleep(3)
-    webbrowser.open("http://localhost:8501")
-    
-    # 2. Start two Worker Agents on different ports
+
+    start_process([
+        sys.executable, "-m", "streamlit", "run",
+        dashboard_path,
+        "--server.port", str(dashboard_port)
+    ], silent=True)
+
+    if not wait_for_port(dashboard_port):
+        click.echo("❌ Dashboard failed to start.")
+        shutdown()
+
+    webbrowser.open(f"http://localhost:{dashboard_port}")
+
+    # ----------------------------
+    # 2. Start Agents
+    # ----------------------------
+    click.echo("🤖 Spawning agent network...")
+
+    agent_ports = []
+
     for i in range(2):
-        port = 5000 + i
-        name = f"Agent_{chr(65+i)}" # Agent_A, Agent_B
-        click.echo(f"🤖 Spinning up {name} on port {port}...")
-        subprocess.Popen([sys.executable, "-m", "flowing.agents.server", 
-                         "--name", name, "--port", str(port)],
-                         stdout=subprocess.DEVNULL)
-    
-    time.sleep(2)
-    
-    # 3. Run a sample Trace to show data immediately
-    click.secho("📝 Generating initial trace data...", fg='yellow')
-    # This runs one of your example scripts to populate the dashboard
-    subprocess.run([sys.executable, "examples/simple_workflow.py"])
-    
-    click.secho("\n✅ SYSTEM LIVE!", fg='green', bold=True)
-    click.echo("Check your browser at http://localhost:8501 to see the live traces.")
-    click.echo("Press Ctrl+C to stop the demo.")
-    
+        port = get_free_port()
+        agent_ports.append(port)
+
+        name = f"Agent_{chr(65+i)}"
+
+        click.echo(f"   • {name} running on port {port}")
+
+        start_process([
+            sys.executable, "-m", "flowing.agents.server",
+            "--name", name,
+            "--port", str(port)
+        ], silent=True)
+
+    # ----------------------------
+    # 3. Generate Demo Activity
+    # ----------------------------
+    click.secho("📝 Generating live trace...", fg='yellow')
+
     try:
-        while True: time.sleep(1)
-    except KeyboardInterrupt:
-        click.echo("\n🛑 Shutting down...")
+        subprocess.run(
+            [sys.executable, "-m", "flowing.examples.simple_workflow"],
+            check=False
+        )
+    except Exception:
+        click.echo("⚠️ Could not run example workflow.")
+
+    # ----------------------------
+    # 4. Final UX
+    # ----------------------------
+    click.secho("\n✅ SYSTEM LIVE", fg='green', bold=True)
+    click.echo(f"Dashboard: http://localhost:{dashboard_port}")
+    click.echo("Agents: running")
+    click.echo("\nPress Ctrl+C to stop")
+
+    # Keep alive
+    while True:
+        time.sleep(1)
