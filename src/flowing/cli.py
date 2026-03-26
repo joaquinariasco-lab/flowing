@@ -103,7 +103,8 @@ def dashboard():
     start_process([
         sys.executable, "-m", "streamlit", "run",
         dashboard_path,
-        "--server.port", str(port)
+        "--server.port", str(port),
+        "--server.headless", "true",  # ✅ Disable auto browser open
     ])
 
     if wait_for_port(port):
@@ -135,7 +136,8 @@ def demo():
     start_process([
         sys.executable, "-m", "streamlit", "run",
         dashboard_path,
-        "--server.port", str(dashboard_port)
+        "--server.port", str(dashboard_port),
+        "--server.headless", "true",  # ✅ Disable auto browser open
     ], silent=True)
 
     if not wait_for_port(dashboard_port):
