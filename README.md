@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/enforcement-active-brightgreen" />
   <img src="https://img.shields.io/badge/output-validated-blueviolet" />
   <img src="https://img.shields.io/badge/execution-controlled-critical" />
-  <img src="https://img.shields.io/badge/license-MIT-lightgrey" />
+  <img src="https://img.shields.io/badge/license-Apache_2.0-lightgrey" />
 </p>
 
 # Flowing: Reliability & Execution Enforcement Layer for AI Systems
