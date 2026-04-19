@@ -137,19 +137,3 @@ Flowing is not:
 Flowing is:
  
 ### A reliability layer for AI systems
-
----
-
-## 🤝 Contributing
-This project is for developers working with:
-- LLM pipelines
-- AI agents
-- Tool-using systems
-- Multi-step workflows
-
-If you’ve experienced:
-- invalid structured outputs
-- unreliable agent behavior
-- hard-to-debug failures
-
-…then you already understand the problem this is solving.
