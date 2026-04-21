@@ -1,8 +1,9 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Config:
-    # Replace with your actual API endpoint
-    API_URL = os.getenv("FLOWING_API_URL", "https://api.openai.com/v1/chat/completions")
-    API_KEY = os.getenv("FLOWING_API_KEY", "your-api-key")
-
-    MODEL = os.getenv("FLOWING_MODEL", "gpt-4o-mini")
+    PROVIDER = os.getenv("FLOWING_PROVIDER", None)
+    API_KEY = os.getenv("FLOWING_API_KEY", None)
+    MODEL = os.getenv("FLOWING_MODEL", None)
